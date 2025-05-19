@@ -1,0 +1,206 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mental Health Chatbot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background-color: #f3faf8;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .chat-container {
+      display: flex;
+      flex-direction: row;
+      width: 90%;
+      max-width: 1200px;
+      height: 90vh;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      background-color: #ffffff;
+    }
+
+    .illustration-section {
+      width: 25%;
+      background-color: #f9f9f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .illustration-section img {
+      max-width: 100%;
+      border-radius: 12px;
+    }
+
+    .chat-box {
+      width: 75%;
+      padding: 24px 30px 20px 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    h2 {
+      text-align: center;
+      color: #30665c;
+      margin-bottom: 6px;
+      font-weight: 600;
+      font-size: 1.4rem;
+    }
+
+    .suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+
+    .suggestions button {
+      background-color: #d9f4ef;
+      border: none;
+      border-radius: 20px;
+      padding: 8px 14px;
+      cursor: pointer;
+      color: #30665c;
+      font-size: 0.9em;
+      transition: background 0.3s ease;
+    }
+
+    .suggestions button:hover {
+      background-color: #74d3c3;
+    }
+
+    #chat-box {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding: 20px;
+      background: #f1f1f1;
+      border-radius: 12px;
+      margin: 10px 0 18px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .message {
+      max-width: 65%;
+      padding: 8px 14px;
+      border-radius: 16px;
+      font-size: 0.95em;
+      line-height: 1.35;
+      word-wrap: break-word;
+      position: relative;
+    }
+
+    .bot {
+      align-self: flex-start;
+      background-color: #e6f9f2;
+      color: #2e3d3a;
+      border-top-left-radius: 0;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .user {
+      align-self: flex-end;
+      background-color: #ffffff;
+      color: #2f7263;
+      border-top-right-radius: 0;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+      border: 1px solid #d9f4ef;
+    }
+
+    .input-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: space-between;
+      margin-top: 6px;
+    }
+
+    #user-input {
+      flex: 1;
+      border-radius: 20px;
+      border: 1px solid #ccc;
+      padding: 12px 18px;
+      font-size: 1em;
+      background-color: #fafafa;
+      box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.05);
+      transition: border 0.2s;
+    }
+
+    #user-input:focus {
+      border-color: #74d3c3;
+      outline: none;
+    }
+
+    #send-btn {
+      background-color: #74d3c3;
+      border: none;
+      padding: 12px 15px;
+      border-radius: 50%;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    #send-btn:hover {
+      background-color: #62b8aa;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="illustration-section">
+      <img src="{% static 'images/illustration.svg' %}" alt="Calming Mind Illustration">
+    </div>
+
+    <div class="chat-box">
+      <h2>🌸 How are you feeling today?</h2>
+      <div class="suggestions">
+        <button>I'm feeling anxious</button>
+        <button>I need someone to talk to</button>
+        <button>I can't sleep</button>
+      </div>
+      <div id="chat-box"></div>
+      <div class="input-box">
+        <input type="text" id="user-input" placeholder="Type your message..." />
+        <button id="send-btn">➤</button>
+        <button id="human-help-btn" style="background-color: #ff2e2e; color: #fff; border: none; border-radius: 20px; padding: 10px 18px; margin-left: 8px; cursor: pointer;">
+          Human Help
+        </button>
+        <script>
+          document.getElementById('human-help-btn').onclick = function() {
+            
+            const chatBox = document.getElementById('chat-box');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message user';
+            msgDiv.textContent = "I would like to talk to a human assistant.";
+            chatBox.appendChild(msgDiv);
+
+        
+            if (typeof sendMessageToBackend === "function") {
+              sendMessageToBackend("get_human_assistant");
+            }
+          };
+        </script>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'chat/script.js' %}"></script>
+</body>
+</html>
